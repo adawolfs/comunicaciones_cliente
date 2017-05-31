@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><title></title><link rel="stylesheet" href="/stylesheets/style.css"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script></head><body><div class="panel panel-primary"><div class="panel-heading"><h3 id="message" class="panel-titlePanel">Username: </h3></div><div class="panel-body"><form action="/connectBluetooth" method="post"><div class="input-group"><input id="bluetooth-address" type="text" placeholder="Bluetooth Address" class="form-control"><span class="input-group-btn"><button id="bluetooth" type="button" class="btn btn-danger">Connect!</button></span></div></form><p></p><form action="/connectServer" method="post"><div class="input-group"><span class="input-group-addon">http://</span><input id="server-address" type="text" placeholder="Server Address" class="form-control"><span class="input-group-btn"><button id="server" type="button" class="btn btn-danger">Connect!</button></span></div></form></div></div><script src="/socket.io/socket.io.js"></script><script>var socket = io();
+
+socket.on('username', function (data) {
+    console.log('username')
+    $("#message").text("Username:" + data);
+});
+
+$(function () {
+    $("#bluetooth").click(function(){
+        address = $("#bluetooth-address").val();
+        $.post("/connectBluetooth", {address: address})
+            .done(function (data) {
+                alert(data);
+            })
+    });
+
+    $("#server").click(function () {
+        address = "http://" + $("#server-address").val();
+        $.post("/connectServer", {address: address})
+            .done(function (data) {
+                alert(data);
+            })
+    });
+})</script></body></html>

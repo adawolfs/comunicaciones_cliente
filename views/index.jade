@@ -1,0 +1,49 @@
+extends layout
+
+
+block content
+    div.panel.panel-primary
+        div.panel-heading
+            h3#message.panel-titlePanel Username: #{username}
+        div.panel-body
+            form(action="/connectBluetooth" method="post")
+                div.input-group
+                    input#bluetooth-address.form-control(type="text" placeholder="Bluetooth Address")
+                    span.input-group-btn
+                        button#bluetooth.btn.btn-danger(type="button") Connect!
+            p
+            form(action="/connectServer" method="post")
+                div.input-group
+                    span.input-group-addon http://
+                    input#server-address.form-control(type="text" placeholder="Server Address")
+                    span.input-group-btn
+                        button#server.btn.btn-danger(type="button") Connect!
+
+
+    script(src='/socket.io/socket.io.js')
+
+    script.
+        var socket = io();
+
+        socket.on('username', function (data) {
+            console.log('username')
+            $("#message").text("Username:" + data);
+        });
+
+        $(function () {
+            $("#bluetooth").click(function(){
+                address = $("#bluetooth-address").val();
+                $.post("/connectBluetooth", {address: address})
+                    .done(function (data) {
+                        alert(data);
+                    })
+            });
+
+            $("#server").click(function () {
+                address = "http://" + $("#server-address").val();
+                $.post("/connectServer", {address: address})
+                    .done(function (data) {
+                        alert(data);
+                    })
+            });
+        })
